@@ -1,6 +1,4 @@
-import "./App.css";
 import axios, { CancelTokenSource } from "axios";
-import "bootstrap/dist/css/bootstrap.css";
 
 const App = () => {
   let cancelToken: CancelTokenSource;
