@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import axios, { CancelTokenSource } from "axios";
+import "bootstrap/dist/css/bootstrap.css";
 
-function App() {
+const App = () => {
+  let cancelToken: CancelTokenSource;
+  const onSearchValue = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+    if (typeof cancelToken != typeof undefined) {
+      cancelToken.cancel("Operation canceled");
+    }
+    cancelToken = axios.CancelToken.source();
+    try {
+      await axios.post(`https://reqbin.com/echo/post/json`, searchValue, {
+        cancelToken: cancelToken.token,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <input type="text" placeholder="Search" onChange={onSearchValue} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
